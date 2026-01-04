@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -8,27 +10,37 @@ use App\Http\Controllers\UserController;
 Route::post('/user/register' , [UserController::class , 'register']);
 Route::post('/user/login' , [UserController::class , 'login']);
 
+Route::post('/admin/register' , [AdminController::class , 'register']);
+Route::post('/admin/login' , [AdminController::class , 'login']);
+
+Route::group(['middleware' => 'auth:admin'], function () {
+    //CRUD for BaseProducts
+    Route::get('admin/products' , [AdminController::class , 'shopProducts']);
+    Route::post('admin/addProduct' , [AdminController::class , 'addProductBase']);
+    Route::put('admin/editProduct/{id}' , [AdminController::class , 'editProducts']);
+    Route::delete('admin/deleteProduct/{id}' , [AdminController::class , 'deleteProduct']);
+
+    //add image to the product
+    Route::post('admin/addImage/{id}' , [AdminController::class , 'addImageToProduct']);
+
+    //CRUD for product sizeColor
+    Route::post('admin/addProductSizeColor/{id}' , [AdminController::class , 'addProductBranch']);
+    Route::put('admin/editProductSizeColor/{id}' , [AdminController::class , 'editProductSizeColor']);
+    Route::delete('admin/deleteProductSizeColor/{id}' , [AdminController::class , 'deleteProductSizeColor']);
+
+    Route::post('/admin/logout' , [AdminController::class , 'logout']);
+});
+
 Route::group(['middleware' => 'auth:user'], function(){
-    Route::get('store/myProducts' , [ProductController::class , 'get_my_products']);
+    Route::get('user/shop' , [UserController::class , 'viewShop']);
 
-    Route::post('store/addProduct' , [ProductController::class , 'add_product_model']);
-    Route::put('store/editProduct' , [ProductController::class , 'edit_product']);
-    Route::delete('store/deleteProduct' , [ProductController::class , 'remove_product']);
+    //CRUD system for orders
+    Route::get('/user/orders', [OrderController::class , 'getOrder']);
+    Route::post('/user/order/{id}', [OrderController::class , 'addOrder']);
+    Route::put('/user/order/edit/{id}' , [OrderController::class , 'editOrder']);
+    Route::delete('/user/order/delete/{id}' , [OrderController::class , 'deleteOrder']);
 
-    Route::post('store/addProductBranch/{id}' , [ProductController::class , 'add_product_branch']);
-    Route::put('store/editProductBranch/{id}' , [ProductController::class , 'edit_product']);
-    Route::delete('store/deleteProductBranch/{id}' , [ProductController::class , 'delete_product_branch']);
-    Route::post('store/addImage/{id}' , [ProductController::class , 'add_image']);
-
-    Route::get('/allProducts' , [ProductController::class , 'get_all_products']);
-
-    Route::post('/user/order/{id}', [ProductController::class , 'add_order']);
-    Route::put('/user/order/edit/{id}' , [ProductController::class , 'edit_order']);
-    Route::delete('/user/order/delete/{id}' , [ProductController::class , 'remove_order']);
-
-    Route::get('/user/orders', [ProductController::class , 'get_orders']);
-
-    Route::post('/user/buyOrder' , [ProductController::class , 'buy_order']);
+    Route::post('/user/buyOrder' , [OrderController::class , 'buyOrders']);
 
     Route::post('/user/logout' , [UserController::class , 'logout']);
 });

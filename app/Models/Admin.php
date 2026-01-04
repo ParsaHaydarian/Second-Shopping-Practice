@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class Admin extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable , HasApiTokens;
@@ -46,10 +46,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function orders(){
-        return $this->hasMany(Order::class);
+    public function products()
+    {
+        return $this->hasMany(BaseProduct::class);
     }
-    public function sells(){
-        return $this->hasMany(Sell::class);
-    }
+
 }

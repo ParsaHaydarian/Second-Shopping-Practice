@@ -6,13 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseProduct extends Model
 {
-    protected $fillable = ["name" , "images" , "user_id"];
+    protected $fillable = ["name" , "images"];
 
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
-    public function sizeColors()
-    {
+    public function sizeColors(){
         return $this->hasMany(SizeColor::class, 'product_id');
     }
     protected $casts = [

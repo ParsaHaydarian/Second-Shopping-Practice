@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BaseProduct;
+use App\Models\SizeColor;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -42,6 +44,9 @@ class UserController extends Controller
     {
         $request->user()->tokens()->delete();
         return response()->json(["message" => "Logged out"]);
+    }
+    public function viewShop(Request $request){
+        return BaseProduct::query()->with('sizeColors')->get();
     }
 }
 

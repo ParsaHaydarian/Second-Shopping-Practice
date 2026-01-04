@@ -36,22 +36,24 @@ return [
     */
 
     'guards' => [
+        'admin' => [
+          'driver' => 'sanctum',
+          'provider' => 'admins',
+        ],
         'user' => [
             'driver' => 'sanctum',
             'provider' => 'users',
         ],
     ],
-
     'providers' => [
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MODEL', App\Models\Admin::class),
+        ],
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*
