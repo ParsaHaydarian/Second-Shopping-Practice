@@ -8,8 +8,7 @@ class SizeColor extends Model
 {
     protected $fillable = ['product_id' , 'size' , 'color' , 'price' , 'quantity'];
 
-    public function product()
-    {
+    public function product(){
         return $this->belongsTo(BaseProduct::class);
     }
 }

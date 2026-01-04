@@ -13,9 +13,9 @@ class AdminController extends Controller
     public function register(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required',
+            'name' => ['required'],
+            'email' => ['required'],['email'],['unique:users'],
+            'password' => ['required'],
         ]);
 
         $admin = Admin::query()->create($validatedData);
@@ -30,8 +30,8 @@ class AdminController extends Controller
     public function login(Request $request)
     {
         $validatedData = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+            'email' => ['required'],['email'],
+            'password' => ['required'],
         ]);
         $admin = Admin::query()->where('email', $validatedData['email'])->first();
         if (!$admin || !Hash::check($request->password, $admin->password)) {
@@ -53,19 +53,18 @@ class AdminController extends Controller
 
     public function shopProducts(Request $request){
         return response()->json([
-            "products" => BaseProduct::with('sizeColors')->get(),
+            "products" => BaseProduct::query()
+                ->with('sizeColors')->get(),
         ]);
     }
     public function addProductBase(Request $request){
-        $validated = $request->validate(['name' => 'required|string|max:255']);
+        $validated = $request->validate(['name' => ['required'],['string'],['max:255']]);
         BaseProduct::query()->create($validated);
         return response()->json(['message' => 'Product added successfully']);
     }
     public function editProducts(Request $request, int $id){
-        $product = BaseProduct::query()->findOrFail($id);
-        $validated = $request->validate(['name' => 'required|string|max:255']);
-        $product->update($validated);
-
+        $validated = $request->validate(['name' => ['required'],['string'],['max:255']]);
+        BaseProduct::query()->findOrFail($id)->update($validated);
         return response()->json(['message' => 'Product updated successfully']);
     }
     public function deleteProduct(Request $request, int $id){
@@ -112,8 +111,3 @@ class AdminController extends Controller
         return response()->json(['message' => 'Product size and color removed successfully']);
     }
 }
-//$branch = SizeColor::query()->
-//whereHas('product', function ($q) use ($request) {
-//    $q->where('user_id', $request->user()->id);
-//})->findOrFail($id);
-

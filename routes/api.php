@@ -44,3 +44,6 @@ Route::group(['middleware' => 'auth:user'], function(){
 
     Route::post('/user/logout' , [UserController::class , 'logout']);
 });
+
+//“ Simplicity is the ultimate sophistication. ”
+//  — Leonardo da Vinci

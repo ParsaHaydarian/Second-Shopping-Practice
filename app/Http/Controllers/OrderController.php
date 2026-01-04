@@ -11,9 +11,8 @@ class OrderController extends Controller
 {
     public function addOrder(Request $request, int $branchId)
     {
-        $user = $request->user();
         $validated = $request->validate(['quantity' => 'required|integer|min:1',]);
-
+        $user = $request->user();
         $branch = SizeColor::query()->findOrFail($branchId);
 
         if ($validated['quantity'] > $branch->quantity)

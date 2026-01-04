@@ -13,9 +13,9 @@ class UserController extends Controller
     public function register(Request $request)
     {
         $validatedData = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required',
+            'name' => ['required'],
+            'email' => ['required'],['email'],['unique:users'],
+            'password' => ['required'],
         ]);
         $user = User::query()->create($validatedData);
         $token = $user->createToken('user_token', ['user'])->plainTextToken;
@@ -29,8 +29,8 @@ class UserController extends Controller
     public function login(Request $request)
     {
         $validatedData = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+            'email' => ['required'],['email'],
+            'password' => ['required'],
         ]);
         $user = User::query()->where('email', $validatedData['email'])->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
