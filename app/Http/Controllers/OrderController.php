@@ -26,7 +26,7 @@ class OrderController extends Controller
         return response()->json(['message' => 'Order placed successfully',]);
     }
     public function editOrder(Request $request, int $id){
-        $validated = $request->validate(['quantity' => 'required|integer|min:1',]);
+        $validated = $request->validate(['quantity' => ['required'],['integer'],['min:1'],]);
         $order = Order::query()
             ->where('user_id', $request->user()->id)
             ->findOrFail($id)
@@ -44,8 +44,7 @@ class OrderController extends Controller
     public function getOrder(Request $request){
         return response()->json([
             'orders' =>
-                $request
-                    ->user()
+                $request->user()
                     ->orders()
                     ->get(),
         ]);
